@@ -11,13 +11,14 @@ using namespace std;
 class ActorActress {
 public:
     ActorActress();
-    ActorActress(string& nme, string& flm, int yr, string& awrd, int win);
+    ActorActress(string& nme, string& flm, string& yr, string& awrd, string& win);
+    friend ostream &operator << (ostream &out, const ActorActress &aa);
 private:
     string name;
     string film;
-    int year;
+    string year;
     string award;
-    int winner;
+    string winner;
 };
 
 

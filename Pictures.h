@@ -11,18 +11,19 @@ using namespace std;
 class Pictures {
 public:
     Pictures();
-    Pictures(string& nme, int yr, string& noms, float rate, int dur, string& g1, string& g2, string& rel,
-             int meta, string& syn);
+    Pictures(string& nme, string& yr, string& noms, string& rate, string& dur, string& g1, string& g2, string& rel,
+             string& meta, string& syn);
+    friend ostream &operator << (ostream &out, const Pictures &p);
 private:
     string name;
-    int year;
+    string year;
     string nominations;
-    float rating;
-    int duration;
+    string rating;
+    string duration;
     string genre1;
     string genre2;
     string release;
-    int metacritic;
+    string metacritic;
     string synopsis;
 
 };
