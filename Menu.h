@@ -16,9 +16,11 @@ private:
     string b = "2. Read in pictures data file and add to pictures list";
     string c = "3. Save the actor-actress list into a csv file";
     string d = "4. Save the pictures list into a csv file";
-    string e = "5. Display the actor-actress list to the screen";
-    string f = "6. Display the pictures list to the screen";
-    string x = "7. Quit";
+    string e = "5. Add an actor-actress object to list";
+    string f = "6. Add a picture object to list";
+    string g = "7. Display the actor-actress list to the screen";
+    string h = "8. Display the pictures list to the screen";
+    string x = "9. Quit";
 };
 
 

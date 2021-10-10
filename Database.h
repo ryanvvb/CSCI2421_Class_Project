@@ -25,6 +25,8 @@ public:
     void printPicturesList();
     void outputAAList();
     void outputPicturesList();
+    void addActorActress();
+    void addPicture();
     string getAAHeader();
     vector<ActorActress> getAAVector();
     vector<Pictures> getPicVector();
@@ -33,11 +35,9 @@ private:
     Menu databaseMenu = Menu();
     vector<ActorActress> aaVector;
     vector<Pictures> picVector;
-    bool keepAsking = true;
     bool done = false;
     string aaHeader;
     string picsHeader;
-    
 };
 
 

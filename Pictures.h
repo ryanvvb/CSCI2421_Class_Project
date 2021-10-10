@@ -25,8 +25,6 @@ private:
     string release;
     string metacritic;
     string synopsis;
-
 };
-
 
 #endif //CSCI2421_CLASS_PROJECT_PICTURES_H

@@ -28,7 +28,12 @@ ActorActress::ActorActress(string& nme, string& flm, string& yr, string& awrd, s
     award = awrd;
     winner = win;
 }
-
+/***
+ * Overoaded out operator for ActorActress object
+ * @param out
+ * @param aa
+ * @return
+ */
 ostream &operator<<(ostream &out, const ActorActress &aa) {
     out << aa.year << "," << aa.award << "," << aa.winner << "," << aa.name << "," << aa.film;
     return out;

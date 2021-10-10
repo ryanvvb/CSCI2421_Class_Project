@@ -14,7 +14,7 @@ void Database::databaseLoop() {
     int selection;
     while(!done){
         this->databaseMenu.displayMenu();
-        cout << "\nPlease select a menu option: "; // Currently does not handle invalid type input
+        cout << "\nPlease select a menu option: ";
         cin >> selection;
 
         switch(selection){
@@ -31,17 +31,26 @@ void Database::databaseLoop() {
                 outputPicturesList();
                 break;
             case 5:
-                printActorActressList();
+                addActorActress();
                 break;
             case 6:
-                printPicturesList();
+                addPicture();
                 break;
             case 7:
+                printActorActressList();
+                break;
+            case 8:
+                printPicturesList();
+                break;
+            case 9:
                 cout << "Exiting program" << endl;
                 this->done = true;
                 break;
             default:
                 cout << "Selection Error: Invalid option, enter a new selection\n";
+                cin.clear();
+                string throwaway;
+                getline(cin, throwaway);
         }
     }
 }
@@ -60,6 +69,7 @@ void Database::readActorFile() {
     cout << "Enter the name of the csv file containing a list of actors and actresses: ";
     cin >> filename;
 
+    // Read the file line by line and save each value to its corresponding variable
     inFile.open(filename);
     if(!inFile){
         cout << "Invalid file name, returning to main menu" << endl;
@@ -94,6 +104,7 @@ void Database::readPicturesFile() {
     cout << "Please enter the name of a csv file containing the name of a list of motion pictures: ";
     cin >> filename;
 
+    // Read the file line by line and save each value to its corresponding variable
     inFile.open(filename);
     if(!inFile){
         cout << "Invalid file name, returning to main menu" << endl;
@@ -163,7 +174,7 @@ string Database::getAAHeader() {
     return aaHeader;
 }
 /***
- * Prints out the column list header followed by every element of the actor actress list on its own line
+ * Prints out the column list header followed by every element of the pictures list on its own line
  */
 void Database::printPicturesList() {
     if(this->picVector.empty()){
@@ -173,7 +184,10 @@ void Database::printPicturesList() {
     cout << this->picsHeader << endl;
     for (auto &i: this->picVector)cout << i << endl;
 }
-
+/***
+ * Prints out the column list header followed by every element of the actor actress list on its own line
+ * In a file the user enters as an input
+ */
 void Database::outputAAList() {
     if(this->aaVector.empty()){
         cout << "No file input has been read, please read in data before attempting to write to file" << endl;
@@ -192,6 +206,10 @@ void Database::outputAAList() {
     outFile.close();
 }
 
+/***
+ * Prints out the column list header followed by every element of the pictures list on its own line
+ * In a file the user enters as an input
+ */
 void Database::outputPicturesList() {
     if(this->picVector.empty()){
         cout << "No file input has been read, please read in data before attempting to write to file" << endl;
@@ -208,6 +226,115 @@ void Database::outputPicturesList() {
     outFile << this->picsHeader << endl;
     for(auto & i: picVector)outFile << i << endl;
     outFile.close();
+}
+
+void Database::addActorActress() {
+    string nme, yr, awrd, wn, flm;
+    try {
+        cout << "Enter the name of an actor or actress: ";
+        cin.ignore();
+        getline(cin, nme);
+
+        cout << "Enter the name of the film the actor or actress was in: ";
+        getline(cin, flm);
+
+        cout << "Enter the year the film was released: ";
+        getline(cin, yr);
+        int y = stoi(yr);
+        if (y < 0){
+            throw(y);
+        }
+
+        cout << "Enter the award the actor or actress was nominated for: ";
+        getline(cin, awrd);
+
+        cout << "Enter a 1 if the actor or actress won the award they were nominated for or a 0 if they did not: ";
+        getline(cin, wn);
+        int w = stoi(wn);
+        if (w > 1 or w < 0){
+            throw(w);
+        }
+    }
+    catch(invalid_argument&){
+        cout << "Invalid argument, a numerical value must be entered" << endl;
+        return;
+    }
+    catch(int e){
+        cout << e << " not within valid input range" << endl;
+        return;
+    }
+    ActorActress aa(nme, flm, yr, awrd, wn);
+    this->aaVector.push_back(aa);
+}
+
+void Database::addPicture() {
+    string nme, yr, noms, rate, dur, g1, g2, rel, meta, syn;
+    try {
+        cout << "Enter the name of a film you would like to enter: ";
+        cin.ignore();
+        getline(cin, nme);
+
+        cout << "Enter the year the film was released: ";
+        getline(cin, yr);
+        int y = stoi(yr);
+        if (y < 0){
+            throw(y);
+        }
+
+        cout << "Enter the number of nominations the film received: ";
+        getline(cin, noms);
+        int n = stoi(noms);
+        if (n < 0){
+            throw(n);
+        }
+
+        cout << "Enter the numerical rating of the film: ";
+        getline(cin, rate);
+        float r = stof(rate);
+        if (r < 0){
+            throw(r);
+        }
+
+        cout << "Enter the duration of the film in minutes: ";
+        getline(cin, dur);
+        int d = stoi(dur);
+        if (d < 0){
+            throw(d);
+        }
+
+        cout << "Enter the primary genre of the film: ";
+        getline(cin, g1);
+
+        cout << "Enter the secondary genre of the film: ";
+        getline(cin, g2);
+
+        cout << "Enter the name of the month of the film's release: ";
+        getline(cin, rel);
+
+        cout << "Enter the metacritic score for the film: ";
+        getline(cin, meta);
+        int m = stoi(meta);
+        if (m < 0){
+            throw(m);
+        }
+
+        cout << "Enter the synopsis of the film: ";
+        getline(cin, syn);
+    }
+    catch(invalid_argument&){
+        cout << "Invalid argument, a numerical value must be entered" << endl;
+        return;
+    }
+    catch(int e){
+        cout << e << " not a valid input.  Input must be a non-negative numerical value" << endl;
+        return;
+    }
+    catch(float e){
+        cout << e << " not a valid input.  Input must be a non-negative numerical value" << endl;
+        return;
+    }
+    Pictures pic(nme, yr, noms, rate, dur, g1, g2, rel, meta, syn);
+    picVector.push_back(pic);
 }
 
 
