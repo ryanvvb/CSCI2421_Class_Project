@@ -84,6 +84,8 @@ void Database::readActorFile() {
         getline(inFile, name, ',');
         getline(inFile, film);
 
+        // Create a new ActorActress object with the data read from current line of input file
+        // and push to the back of the vector
         ActorActress aa = ActorActress(name, film, year, award, win);
         aaVector.push_back(aa);
     }
@@ -124,6 +126,7 @@ void Database::readPicturesFile() {
         getline(inFile, meta, ',');
         getline(inFile, synopsis);
 
+        // Create a new Pictures object with data from current line of the input file and push to the back of the vector
         Pictures pic = Pictures(name, year, nominations, rating, duration,
                                 genre1, genre2, release, meta, synopsis);
         picVector.push_back(pic);
@@ -170,6 +173,10 @@ void Database::printActorActressList() {
     cout << this->aaHeader << endl;
     for (auto &i: this->aaVector)cout << i << endl;
 }
+/***
+ * return the aaHeader
+ * @return aaHeader line from input file
+ */
 string Database::getAAHeader() {
     return aaHeader;
 }
@@ -200,8 +207,10 @@ void Database::outputAAList() {
     cout << "Enter the name of a file to save the Actor-Actress list to: ";
     cin >> filename;
 
+    // Open the output file if it exists, if it does not, create the file for output
     outFile.open(filename);
     outFile << this->aaHeader << endl;
+    // Output each object from the aaVector as one line of output in the file
     for(auto & i: aaVector)outFile << i << endl;
     outFile.close();
 }
@@ -222,12 +231,17 @@ void Database::outputPicturesList() {
     cout << "Enter the name of a file to save the Motion Pictures list to: ";
     cin >> filename;
 
+    // Open the output file if it exists, if it does not, create the file for output
     outFile.open(filename);
     outFile << this->picsHeader << endl;
+    // Output each object from the picsVector as one line of output in the file
     for(auto & i: picVector)outFile << i << endl;
     outFile.close();
 }
 
+/***
+ * Prompts the user for all the necessary parameters to create a new ActorActress object and adds it to the list
+ */
 void Database::addActorActress() {
     string nme, yr, awrd, wn, flm;
     try {
@@ -241,8 +255,8 @@ void Database::addActorActress() {
         cout << "Enter the year the film was released: ";
         getline(cin, yr);
         int y = stoi(yr);
-        if (y < 0){
-            throw(y);
+        if (y < 0) {
+            throw (y);
         }
 
         cout << "Enter the award the actor or actress was nominated for: ";
@@ -251,14 +265,18 @@ void Database::addActorActress() {
         cout << "Enter a 1 if the actor or actress won the award they were nominated for or a 0 if they did not: ";
         getline(cin, wn);
         int w = stoi(wn);
-        if (w > 1 or w < 0){
-            throw(w);
+        if (w > 1 or w < 0) {
+            throw (w);
         }
     }
+    // If the user enters an improper type as input invalid_argument exception will be thrown and caught here
+    // Invalid input will result in the function terminating and returning to the menu
     catch(invalid_argument&){
         cout << "Invalid argument, a numerical value must be entered" << endl;
         return;
     }
+    // If the user enters a negative value, the input will be thrown and caught here
+    // Negative input values will result in the function terminating and returning to the menu
     catch(int e){
         cout << e << " not within valid input range" << endl;
         return;
@@ -267,6 +285,9 @@ void Database::addActorActress() {
     this->aaVector.push_back(aa);
 }
 
+/***
+ * Prompts the user for all the necessary parameters to create a new Pictures object and adds it to the list
+ */
 void Database::addPicture() {
     string nme, yr, noms, rate, dur, g1, g2, rel, meta, syn;
     try {
@@ -321,14 +342,20 @@ void Database::addPicture() {
         cout << "Enter the synopsis of the film: ";
         getline(cin, syn);
     }
+    // If the user enters an improper type as input invalid_argument exception will be thrown and caught here
+    // Invalid input will result in the function terminating and returning to the menu
     catch(invalid_argument&){
         cout << "Invalid argument, a numerical value must be entered" << endl;
         return;
     }
+    // If the user enters a negative value, the input will be thrown and caught here
+    // Negative input values will result in the function terminating and returning to the menu
     catch(int e){
         cout << e << " not a valid input.  Input must be a non-negative numerical value" << endl;
         return;
     }
+    // If the user enters a negative value, the input will be thrown and caught here
+    // Negative input values will result in the function terminating and returning to the menu
     catch(float e){
         cout << e << " not a valid input.  Input must be a non-negative numerical value" << endl;
         return;
