@@ -12,6 +12,16 @@ class ActorActress {
 public:
     ActorActress();
     ActorActress(string& nme, string& flm, string& yr, string& awrd, string& win);
+    string getName();
+    string getFilm();
+    string getYear();
+    string getAward();
+    string getWinner();
+    void setName(string& n);
+    void setFilm(string& f);
+    void setYear(string& y);
+    void setAward(string& a);
+    void setWinner(string& w);
     friend ostream &operator << (ostream &out, const ActorActress &aa);
 private:
     string name;

@@ -19,5 +19,9 @@ void Menu::displayMenu() {
     cout << f << endl;
     cout << g << endl;
     cout << h << endl;
+    cout << i << endl;
+    cout << j << endl;
+    cout << k << endl;
+    cout << l << endl;
     cout << x << endl;
 }

@@ -43,6 +43,18 @@ void Database::databaseLoop() {
                 printPicturesList();
                 break;
             case 9:
+                searchActorActress();
+                break;
+            case 10:
+                searchPictures();
+                break;
+            case 11:
+                sortActorActress();
+                break;
+            case 12:
+                sortPictures();
+                break;
+            case 13:
                 cout << "Exiting program" << endl;
                 this->done = true;
                 break;
@@ -363,5 +375,290 @@ void Database::addPicture() {
     Pictures pic(nme, yr, noms, rate, dur, g1, g2, rel, meta, syn);
     picVector.push_back(pic);
 }
+//TODO FINISH THIS ENTIRE THING
+void Database::searchActorActress() {
+    int selection;
+    bool menu_loop = true;
+    string search_key;
+    vector<ActorActress> searchResults;
 
+    cout << "Search categories" << endl;
+    cout << "1. Name" << endl;
+    cout << "2. Award" << endl;
+    cout << "3. Return to main menu" << endl;
 
+    while(menu_loop) {
+        cout << "Please enter a number to select a search criteria: ";
+        cin >> selection;
+
+        switch(selection){
+            case 1:
+                sort(aaVector.begin(), aaVector.end(), compareAAName);
+                cout << "Enter the name of an actor or actress to look up";
+                cin >> search_key;
+                searchResults = databaseNameSearch(aaVector, search_key);
+                break;
+            case 2:
+                sort(aaVector.begin(), aaVector.end(), compareAAAward);
+                search_key = selectAwardActorActress();
+                searchResults = databaseAwardSearch(aaVector, search_key);
+                break;
+            case 3:
+                menu_loop = false;
+                break;
+            default:
+                cout << "Selection error; please enter a valid menu selection" << endl;
+                cin.clear();
+                string throwaway;
+                getline(cin, throwaway);
+        }
+    }
+
+}
+// TODO Do something with the search results
+// TODO Fix the genre search
+void Database::searchPictures() {
+    int selection;
+    string search_key;
+    bool menu_loop = true;
+    vector<Pictures*> searchResults;
+    string test = "test";
+    vector<Pictures*> testpics;
+    Pictures *p = &picVector[0];
+
+    cout << "Search categories" << endl;
+    cout << "1. Film Name" << endl;
+    cout << "2. Genre" << endl;
+    cout << "3. Return to main menu" << endl;
+
+    while(menu_loop){
+        cout << "Please enter a number to select a search criteria: ";
+        cin >> selection;
+
+        switch(selection){
+            case 1:
+                sort(picVector.begin(), picVector.end(), comparePicturesName);
+                cout << "Enter the name of a film to look up: ";
+                cin >> search_key;
+                searchResults = databaseNameSearch(picVector, search_key);
+                printSearchResults(searchResults, picsHeader);
+                // At this point the search finds the correct value and returns an array with the value
+                break;
+            case 2:
+                sort(picVector.begin(), picVector.end(), comparePicturesGenre);
+                search_key = selectCategoryPictures();
+                searchResults = databaseGenreSearch(picVector, search_key);
+                printSearchResults(searchResults, picsHeader);
+                testpics.push_back(p);
+                testpics[0]->setName(test);
+                break;
+            case 3:
+                menu_loop = false;
+                break;
+            default:
+                cout << "Selection error; please enter a valid menu selection" << endl;
+                cin.clear();
+                string throwaway;
+                getline(cin, throwaway);
+        }
+    }
+
+}
+/**
+ * Displays a list of away categories the user can select
+ * @return searchCriteria of the award category as a string used to search the vector for matching actors or actresses
+ */
+string Database::selectAwardActorActress() {
+    string actorL = "Actor in a Leading Role";
+    string actressL = "Actress in a Leading Role";
+    string actorS = "Actor in a Supporting Role";
+    string actressS = "Actress in a Suppprting Role";
+    int selection;
+    string searchCriteria;
+
+    cout << "You may select from the following categories" << endl;
+    cout << "1. " << actorL << endl;
+    cout << "2. " << actressL << endl;
+    cout << "3. " << actorS << endl;
+    cout << "4. " << actressS << endl;
+    cout << "Enter the number of your selection: ";
+    cin >> selection;
+
+    switch(selection){
+        case 1:
+            searchCriteria = actorL;
+            break;
+        case 2:
+            searchCriteria = actressL;
+            break;
+        case 3:
+            searchCriteria = actorS;
+            break;
+        case 4:
+            searchCriteria = actressS;
+            break;
+        default:
+            cout << "Please enter a valid menu selection" << endl;
+            cin.clear();
+            string throwaway;
+            getline(cin, throwaway);
+            break;
+    }
+    return searchCriteria;
+}
+/**
+ * Displays a list of genres the user can select to use as a search criteria
+ * @return searchCriteria string value to search the vector for matching films
+ */
+string Database::selectCategoryPictures() {
+    int selection;
+    string searchCriteria;
+    string drama = "Drama";
+    string bio = "Biography";
+    string adv = "Adventure";
+    string com = "Comedy";
+    string wes = "Western";
+    string mus = "Musical";
+    string crime = "Crime";
+
+    cout << "You may select from the following genre categories" << endl;
+    cout << "1. " << drama << endl;
+    cout << "2. " << bio << endl;
+    cout << "3. " << adv << endl;
+    cout << "4. " << com << endl;
+    cout << "5. " << wes << endl;
+    cout << "6. " << mus << endl;
+    cout << "7. " << crime;
+
+    cout << "Enter a search category: ";
+    cin >> selection;
+    switch(selection){
+        case 1:
+            searchCriteria = drama;
+            break;
+        case 2:
+            searchCriteria = bio;
+            break;
+        case 3:
+            searchCriteria = adv;
+            break;
+        case 4:
+            searchCriteria = com;
+            break;
+        case 5:
+            searchCriteria = wes;
+            break;
+        case 6:
+            searchCriteria = mus;
+            break;
+        case 7:
+            searchCriteria = crime;
+            break;
+        default:
+            cout << "Enter a valid search category";
+            cin.clear();
+            string throwaway;
+            getline(cin, throwaway);
+    }
+    return searchCriteria;
+}
+/**
+ * Sorts the Actor Actress vector in alphabetical name order or by the award nomination category
+ * The user enters a number corresponding to their selection and a quick sort is performed on the vector
+ */
+void Database::sortActorActress() {
+    int selection;
+    bool menu_loop = true;
+
+    cout << "1. Actor or Actress name in alphabetical order" << endl;
+    cout << "2. Award Nomination Category" << endl;
+    while(menu_loop) {
+        cout << "Define the sorting category for the Actor-Actress list, enter the corresponding number: ";
+        cin >> selection;
+        switch(selection) {
+            case 1:
+                sort(aaVector.begin(), aaVector.end(), compareAAName);
+                menu_loop = false;
+                break;
+            case 2:
+                sort(aaVector.begin(), aaVector.end(), compareAAAward);
+                menu_loop = false;
+                break;
+            default:
+                cout << "Selection error; please enter a valid menu selection" << endl;
+                cin.clear();
+                string throwaway;
+                getline(cin, throwaway);
+        }
+    }
+}
+/**
+ * Sorts the Pictures vector based on either alphabetical name order or by the primary genre
+ * The user enters a number corresponding to their selection and a quick sort is performed on the vector
+ */
+void Database::sortPictures() {
+    int selection;
+    bool menu_loop = true;
+
+    cout << "1. Picture name in alphabetical order" << endl;
+    cout << "2. Picture genre Category" << endl;
+    while(menu_loop) {
+        cout << "Define the sorting category for the Pictures list, enter the corresponding number: ";
+        cin >> selection;
+        switch(selection) {
+            case 1:
+                sort(picVector.begin(), picVector.end(), comparePicturesName);
+                menu_loop = false;
+                break;
+            case 2:
+                sort(picVector.begin(), picVector.end(), comparePicturesGenre);
+                menu_loop = false;
+                break;
+            default:
+                cout << "Selection error; please enter a valid menu selection" << endl;
+                cin.clear();
+                string throwaway;
+                getline(cin, throwaway);
+        }
+    }
+}
+
+bool Database::compareAAName(ActorActress lhs, ActorActress rhs) {
+    return lhs.getName() < rhs.getName();
+}
+
+bool Database::compareAAAward(ActorActress lhs, ActorActress rhs) {
+    return lhs.getAward() < rhs.getAward();
+}
+
+bool Database::comparePicturesName(Pictures lhs, Pictures rhs) {
+    return lhs.getName() < rhs.getName();
+}
+
+bool Database::comparePicturesGenre(Pictures lhs, Pictures rhs) {
+    return lhs.getGenre1() < rhs.getGenre1();
+}
+
+vector<ActorActress*> Database::databaseAwardSearch(vector<ActorActress> &arr, string &key) {
+    vector<ActorActress*> aa;
+    for(auto & i : arr){
+        if(i.getAward() == key){
+            ActorActress *a;
+            a = &i;
+            aa.push_back(a);
+        }
+    }
+    return aa;
+}
+
+vector<Pictures> Database::databaseGenreSearch(vector<Pictures> &arr, string &key) {
+    vector<Pictures> pic;
+    for(auto & i : arr){
+        if(i.getGenre1() == key){
+            Pictures *p;
+            p = &i;
+            pic.push_back(*p);
+        }
+    }
+    return pic;
+}

@@ -38,3 +38,43 @@ ostream &operator<<(ostream &out, const ActorActress &aa) {
     out << aa.year << "," << aa.award << "," << aa.winner << "," << aa.name << "," << aa.film;
     return out;
 }
+
+string ActorActress::getName() {
+    return name;
+}
+
+string ActorActress::getFilm() {
+    return film;
+}
+
+string ActorActress::getYear() {
+    return year;
+}
+
+string ActorActress::getAward() {
+    return award;
+}
+
+string ActorActress::getWinner() {
+    return winner;
+}
+
+void ActorActress::setName(string& n) {
+    name = n;
+}
+
+void ActorActress::setFilm(string &f) {
+    film = f;
+}
+
+void ActorActress::setYear(string &y) {
+    year = y;
+}
+
+void ActorActress::setAward(string &a) {
+    award = a;
+}
+
+void ActorActress::setWinner(string &w) {
+    winner = w;
+}

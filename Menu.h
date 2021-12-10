@@ -12,15 +12,19 @@ public:
     Menu();
     void displayMenu();
 private:
-    string a = "1. Read in actor-actress data file and add to actor-actress list";
-    string b = "2. Read in pictures data file and add to pictures list";
-    string c = "3. Save the actor-actress list into a csv file";
-    string d = "4. Save the pictures list into a csv file";
-    string e = "5. Add an actor-actress object to list";
-    string f = "6. Add a picture object to list";
-    string g = "7. Display the actor-actress list to the screen";
-    string h = "8. Display the pictures list to the screen";
-    string x = "9. Quit";
+    string a = "1.  Read in actor-actress data file and add to actor-actress list";
+    string b = "2.  Read in pictures data file and add to pictures list";
+    string c = "3.  Save the actor-actress list into a csv file";
+    string d = "4.  Save the pictures list into a csv file";
+    string e = "5.  Add an actor-actress object to list";
+    string f = "6.  Add a picture object to list";
+    string g = "7.  Display the actor-actress list to the screen";
+    string h = "8.  Display the pictures list to the screen";
+    string i = "9.  Search for an actor-actress object";
+    string j = "10. Search for a pictures object";
+    string k = "11. Sort Actor-Actress list";
+    string l = "12. Sort Pictures list";
+    string x = "13. Quit";
 };
 
 

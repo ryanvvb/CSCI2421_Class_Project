@@ -55,3 +55,79 @@ ostream &operator<<(ostream &out, const Pictures &p) {
     "," << p.genre2 << "," << p.release << "," << p.metacritic << "," << p.synopsis;
     return out;
 }
+
+string Pictures::getName() {
+    return name;
+}
+
+string Pictures::getYear() {
+    return year;
+}
+
+string Pictures::getNom() {
+    return nominations;
+}
+
+string Pictures::getRating() {
+    return rating;
+}
+
+string Pictures::getDuration() {
+    return duration;
+}
+
+string Pictures::getGenre1() {
+    return genre1;
+}
+
+string Pictures::getGenre2() {
+    return genre2;
+}
+
+string Pictures::getRelease() {
+    return release;
+}
+
+string Pictures::getMetacritic() {
+    return metacritic;
+}
+
+string Pictures::getSynopsis() {
+    return synopsis;
+}
+
+void Pictures::setName(string &n) {
+    name = n;
+}
+
+void Pictures::setYear(string &y) {
+    year = y;
+}
+
+void Pictures::setNom(string &n) {
+    nominations = n;
+}
+
+void Pictures::setRating(string &r) {
+    rating = r;
+}
+
+void Pictures::setGenre1(string &g1) {
+    genre1 = g1;
+}
+
+void Pictures::setGenre2(string &g2) {
+    genre2 = g2;
+}
+
+void Pictures::setRelease(string &r) {
+    release = r;
+}
+
+void Pictures::setMetacritic(string &m) {
+    metacritic = m;
+}
+
+void Pictures::setSynopsis(string &s) {
+    synopsis = s;
+}

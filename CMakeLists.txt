@@ -3,4 +3,4 @@ project(CSCI2421_Class_Project)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(CSCI2421_Class_Project main.cpp ActorActress.cpp ActorActress.h Pictures.cpp Pictures.h Menu.cpp Menu.h Database.cpp Database.h)
+add_executable(CSCI2421_Class_Project main.cpp ActorActress.cpp ActorActress.h Pictures.cpp Pictures.h Menu.cpp Menu.h Database.cpp Database.h CompareActorActressName.cpp CompareActorActressName.h CompareActorActressAward.cpp CompareActorActressAward.h ComparePicturesName.cpp ComparePicturesName.h ComparePicturesGenre.cpp ComparePicturesGenre.h)
