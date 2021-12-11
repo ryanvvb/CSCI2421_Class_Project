@@ -28,6 +28,7 @@ public:
     void setYear(string& y);
     void setNom(string& n);
     void setRating(string& r);
+    void setDuration(string& d);
     void setGenre1(string& g1);
     void setGenre2(string& g2);
     void setRelease(string& r);

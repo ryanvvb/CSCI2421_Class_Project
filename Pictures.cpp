@@ -131,3 +131,7 @@ void Pictures::setMetacritic(string &m) {
 void Pictures::setSynopsis(string &s) {
     synopsis = s;
 }
+
+void Pictures::setDuration(string &d) {
+    duration = d;
+}

@@ -4,10 +4,6 @@
 #include "Menu.h"
 #include "ActorActress.h"
 #include "Pictures.h"
-#include "CompareActorActressAward.h"
-#include "CompareActorActressName.h"
-#include "ComparePicturesName.h"
-#include "ComparePicturesGenre.h"
 #include <algorithm>
 #include <vector>
 #include <fstream>
@@ -40,15 +36,16 @@ public:
     void searchPictures();
     void sortActorActress();
     void sortPictures();
-    // Edit Actor Actress(vector)
-    // Edit Picture(vector)
+    void editActorActress(vector<ActorActress*> & aa);
+    void editPicture(vector<Pictures*> & pics);
     string selectAwardActorActress();
     string selectCategoryPictures();
     string getAAHeader();
     vector<ActorActress> getAAVector();
     vector<Pictures> getPicVector();
-    vector<ActorActress> databaseAwardSearch(vector<ActorActress> & arr, string & key);
-    vector<Pictures> databaseGenreSearch(vector<Pictures> & arr, string & key);
+    vector<ActorActress*> databaseAwardSearch(vector<ActorActress> & arr, string & key);
+    vector<Pictures*> databaseGenreSearch(vector<Pictures> & arr, string & key);
+
     template<typename Object>
     vector<Object*> databaseNameSearch(vector<Object> & arr, string & key){
         vector<Object*> returnVector;
@@ -61,11 +58,15 @@ public:
         }
         return returnVector;
     }
+
     template<typename Object>
-    void printSearchResults(vector<Object> & arr, string & header){
+    void printSearchResults(vector<Object*> & arr, string & header){
+        int counter = 0;
         cout << header << endl;
         for(auto & i : arr){
-            cout << i << endl;
+            cout << counter << ". ";
+            cout << *i << endl;
+            counter++;
         }
     }
 private:

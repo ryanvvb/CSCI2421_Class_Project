@@ -38,9 +38,11 @@ void Database::databaseLoop() {
                 break;
             case 7:
                 printActorActressList();
+                cout << endl;
                 break;
             case 8:
                 printPicturesList();
+                cout << endl;
                 break;
             case 9:
                 searchActorActress();
@@ -102,6 +104,7 @@ void Database::readActorFile() {
         aaVector.push_back(aa);
     }
     cout << "Data successfully read in from " << filename << endl;
+    cout << endl;
     inFile.close();
 }
 /***
@@ -375,33 +378,44 @@ void Database::addPicture() {
     Pictures pic(nme, yr, noms, rate, dur, g1, g2, rel, meta, syn);
     picVector.push_back(pic);
 }
-//TODO FINISH THIS ENTIRE THING
+/**
+ * Search the actor actress vector based on name or award nomination
+ * The user selects the search type from a menu and enters the value to search for
+ * A vector of pointers pointing to the original objects is created and used to make edits to those objects
+ */
 void Database::searchActorActress() {
     int selection;
     bool menu_loop = true;
     string search_key;
-    vector<ActorActress> searchResults;
-
-    cout << "Search categories" << endl;
-    cout << "1. Name" << endl;
-    cout << "2. Award" << endl;
-    cout << "3. Return to main menu" << endl;
+    string narrow_results;
+    vector<ActorActress*> searchResults;
 
     while(menu_loop) {
+        // User selects a search criteria
+        cout << "Search categories" << endl;
+        cout << "1. Name" << endl;
+        cout << "2. Award" << endl;
+        cout << "3. Return to main menu" << endl;
         cout << "Please enter a number to select a search criteria: ";
         cin >> selection;
+        // As long as the user has not selected menu option 3, the loop will continue
 
         switch(selection){
+            // The list is sorted by name alphabetically and the user enters a name to search for
+            // A vector of pointers that point to the original objects in the database is created and used to edit
             case 1:
                 sort(aaVector.begin(), aaVector.end(), compareAAName);
-                cout << "Enter the name of an actor or actress to look up";
-                cin >> search_key;
+                cout << "Enter the name of an actor or actress to look up: ";
+                cin.ignore();
+                getline(cin, search_key);
                 searchResults = databaseNameSearch(aaVector, search_key);
+                editActorActress(searchResults);
                 break;
             case 2:
                 sort(aaVector.begin(), aaVector.end(), compareAAAward);
                 search_key = selectAwardActorActress();
                 searchResults = databaseAwardSearch(aaVector, search_key);
+                editActorActress(searchResults);
                 break;
             case 3:
                 menu_loop = false;
@@ -415,42 +429,40 @@ void Database::searchActorActress() {
     }
 
 }
-// TODO Do something with the search results
-// TODO Fix the genre search
+/**
+ * Search the actor actress vector based on name or primary genre
+ * The user selects the search type from a menu and enters the value to search for
+ * A vector of pointers pointing to the original objects is created and used to make edits to those objects
+ */
 void Database::searchPictures() {
     int selection;
     string search_key;
     bool menu_loop = true;
     vector<Pictures*> searchResults;
-    string test = "test";
-    vector<Pictures*> testpics;
-    Pictures *p = &picVector[0];
 
-    cout << "Search categories" << endl;
-    cout << "1. Film Name" << endl;
-    cout << "2. Genre" << endl;
-    cout << "3. Return to main menu" << endl;
 
     while(menu_loop){
+        cout << "Search categories" << endl;
+        cout << "1. Film Name" << endl;
+        cout << "2. Genre" << endl;
+        cout << "3. Return to main menu" << endl;
         cout << "Please enter a number to select a search criteria: ";
         cin >> selection;
 
         switch(selection){
             case 1:
                 sort(picVector.begin(), picVector.end(), comparePicturesName);
+                cin.ignore();
                 cout << "Enter the name of a film to look up: ";
-                cin >> search_key;
+                getline(cin, search_key);
                 searchResults = databaseNameSearch(picVector, search_key);
                 printSearchResults(searchResults, picsHeader);
-                // At this point the search finds the correct value and returns an array with the value
                 break;
             case 2:
                 sort(picVector.begin(), picVector.end(), comparePicturesGenre);
                 search_key = selectCategoryPictures();
                 searchResults = databaseGenreSearch(picVector, search_key);
                 printSearchResults(searchResults, picsHeader);
-                testpics.push_back(p);
-                testpics[0]->setName(test);
                 break;
             case 3:
                 menu_loop = false;
@@ -484,6 +496,7 @@ string Database::selectAwardActorActress() {
     cout << "Enter the number of your selection: ";
     cin >> selection;
 
+    // User input determines the string value of searchCriteria which is returned
     switch(selection){
         case 1:
             searchCriteria = actorL;
@@ -532,6 +545,7 @@ string Database::selectCategoryPictures() {
 
     cout << "Enter a search category: ";
     cin >> selection;
+    // User input determines the string value of searchCriteria which is returned
     switch(selection){
         case 1:
             searchCriteria = drama;
@@ -570,6 +584,7 @@ void Database::sortActorActress() {
     int selection;
     bool menu_loop = true;
 
+    // The user selects their sport preference from a menu and the sort is performed
     cout << "1. Actor or Actress name in alphabetical order" << endl;
     cout << "2. Award Nomination Category" << endl;
     while(menu_loop) {
@@ -600,6 +615,7 @@ void Database::sortPictures() {
     int selection;
     bool menu_loop = true;
 
+    // The user selects their sort preference from a menu and the sort is performed
     cout << "1. Picture name in alphabetical order" << endl;
     cout << "2. Picture genre Category" << endl;
     while(menu_loop) {
@@ -623,6 +639,31 @@ void Database::sortPictures() {
     }
 }
 
+vector<ActorActress*> Database::databaseAwardSearch(vector<ActorActress> &arr, string &key) {
+    vector<ActorActress*> aa;
+    for(auto & i : arr){
+        if(i.getAward() == key){
+            ActorActress *a;
+            a = &i;
+            aa.push_back(a);
+        }
+    }
+    return aa;
+}
+
+vector<Pictures*> Database::databaseGenreSearch(vector<Pictures> &arr, string &key) {
+    vector<Pictures*> pic;
+    for(auto & i : arr){
+        if(i.getGenre1() == key){
+            Pictures *p;
+            p = &i;
+            pic.push_back(p);
+        }
+    }
+    return pic;
+}
+
+
 bool Database::compareAAName(ActorActress lhs, ActorActress rhs) {
     return lhs.getName() < rhs.getName();
 }
@@ -638,27 +679,166 @@ bool Database::comparePicturesName(Pictures lhs, Pictures rhs) {
 bool Database::comparePicturesGenre(Pictures lhs, Pictures rhs) {
     return lhs.getGenre1() < rhs.getGenre1();
 }
+void Database::editActorActress(vector<ActorActress *> & aa) {
+    int aa_selection;
+    int cat_selection;
+    string input;
 
-vector<ActorActress*> Database::databaseAwardSearch(vector<ActorActress> &arr, string &key) {
-    vector<ActorActress*> aa;
-    for(auto & i : arr){
-        if(i.getAward() == key){
-            ActorActress *a;
-            a = &i;
-            aa.push_back(a);
+    cout << "Choose one of the following actor or actresses to edit: " << endl;
+    printSearchResults(aa, aaHeader);
+    cout << "Enter selection: ";
+    cin >> aa_selection;
+
+    while (cat_selection != 0) {
+        cout << "Choose from one of the following categories to edit" << endl;
+        cout << "1. Name" << endl;
+        cout << "2. Film" << endl;
+        cout << "3. Year" << endl;
+        cout << "4. Award" << endl;
+        cout << "5. Winner" << endl;
+        cout << "0. Done editing" << endl;
+
+        cout << "Enter selection: ";
+        cin >> cat_selection;
+        switch(cat_selection){
+            case 0:
+                cout << "Done editing" << endl;
+                break;
+            case 1:
+                cout << "Enter name: ";
+                cin.ignore();
+                getline(cin, input);
+                aa[aa_selection]->setName(input);
+                break;
+            case 2:
+                cout << "Enter film name: ";
+                cin.ignore();
+                getline(cin, input);
+                aa[aa_selection]->setFilm(input);
+                break;
+            case 3:
+                cout << "Enter year of film release: ";
+                cin.ignore();
+                getline(cin, input);
+                aa[aa_selection]->setYear(input);
+                break;
+            case 4:
+                cout << "Enter the award this actor or actress was nominated for: ";
+                cin.ignore();
+                getline(cin, input);
+                aa[aa_selection]->setAward(input);
+                break;
+            case 5:
+                cout << "Enter a 0 or 1 if the actor or actress did not win or won the award respectively: ";
+                cin.ignore();
+                getline(cin, input);
+                aa[aa_selection]->setWinner(input);
+                break;
+            default:
+                cout << "Selection invalid; please enter a valid menu selection" << endl;
+                cin.clear();
+                string throwaway;
+                getline(cin, throwaway);
         }
     }
-    return aa;
 }
 
-vector<Pictures> Database::databaseGenreSearch(vector<Pictures> &arr, string &key) {
-    vector<Pictures> pic;
-    for(auto & i : arr){
-        if(i.getGenre1() == key){
-            Pictures *p;
-            p = &i;
-            pic.push_back(*p);
+void Database::editPicture(vector<Pictures *> & pics) {
+    int pic_selection;
+    int cat_selection;
+    string input;
+
+    cout << "Please select one of the following films to edit" << endl;
+    printSearchResults(pics, picsHeader);
+    cout << "Enter selection: ";
+    cin >> pic_selection;
+
+    while(cat_selection != 0){
+        cout << "Select from one of the following categories to edit" << endl;
+        cout << "1. Name" << endl;
+        cout << "2. Year" << endl;
+        cout << "3. Nominations" << endl;
+        cout << "4. Rating" << endl;
+        cout << "5. Duration" << endl;
+        cout << "6. Primary Genre" << endl;
+        cout << "7. Secondary Genre" << endl;
+        cout << "8. Release" << endl;
+        cout << "9. Metacritic Rating" << endl;
+        cout << "10. Synopsis" << endl;
+        cout << "0. Done Editing" << endl;
+
+        cout << "Enter selection: ";
+        cin >> cat_selection;
+        switch(cat_selection){
+            case 0:
+                cout << "Done editing" << endl;
+                break;
+            case 1:
+                cout << "Enter film name: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setName(input);
+                break;
+            case 2:
+                cout << "Enter year: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setYear(input);
+                break;
+            case 3:
+                cout << "Enter number of nominations: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setNom(input);
+                break;
+            case 4:
+                cout << "Enter rating: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setRating(input);
+                break;
+            case 5:
+                cout << "Enter duration: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setDuration(input);
+                break;
+            case 6:
+                cout << "Enter primary genre: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setGenre1(input);
+                break;
+            case 7:
+                cout << "Enter secondary genre";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setGenre2(input);
+                break;
+            case 8:
+                cout << "Enter release: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setRelease(input);
+                break;
+            case 9:
+                cout << "Enter Metacritic rating: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setMetacritic(input);
+                break;
+            case 10:
+                cout << "Enter synopsis: ";
+                cin.ignore();
+                getline(cin, input);
+                pics[pic_selection]->setSynopsis(input);
+                break;
+            default:
+                cout << "Selection invalid; enter a valid menu selection" << endl;
+                string throwaway;
+                cin.ignore();
+                getline(cin, throwaway);
         }
     }
-    return pic;
 }
+
